@@ -20,6 +20,16 @@ class _LoginPageState extends State<LoginPage> {
       log(user.email);
       log(user.id);
       log(user.photoUrl.toString());
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Column(
+          children: [
+            Text(
+                "Name: ${user.displayName}\nEmail: ${user.email}\nId: ${user.id}\nPhotoUrl: ${user.photoUrl}"),
+            Image.network(user.photoUrl.toString()),
+          ],
+        )));
+      }
     } catch (exception) {
       log(exception.toString());
     }
@@ -28,8 +38,17 @@ class _LoginPageState extends State<LoginPage> {
   Future googleSignOut() async {
     try {
       await GoogleSignInService.logout();
+      log('Sign Out Success');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Sign Out Success')));
+      }
     } catch (exception) {
       log(exception.toString());
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Sign Out Failed')));
+      }
     }
   }
 
